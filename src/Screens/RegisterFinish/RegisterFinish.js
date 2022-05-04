@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text } from "react-native";
+import storage from '@react-native-firebase/storage';
+//Firebase
+// Database...
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import { utils } from '@react-native-firebase/app'
 
 
 
@@ -16,8 +22,6 @@ import CustomInput from "../../components/CustomInput";
 import ContentInputModal from "../../components/Modal"
 
 
-// Database...
-import database from '@react-native-firebase/database';
 
 
 
@@ -32,6 +36,9 @@ const RegisterFinish = ({ navigation, route }) => {
 
     function showInputModal() {
         setInputModalVisible(!inputModalVisible);
+        saveUser();
+
+
     }
 
     //User bilgilerini tutan state
@@ -40,7 +47,8 @@ const RegisterFinish = ({ navigation, route }) => {
     const [user, setUser] = useState({
         userName: route.params.userName,
         birthday: route.params.birthday,
-        photo: route.params.photo,
+        ImageUri: route.params.imageUri,
+
     });
 
     // Bir önceki ekrana git
@@ -50,29 +58,160 @@ const RegisterFinish = ({ navigation, route }) => {
     };
 
 
+    const goHome = () => {
+        navigation.navigate("Home");
+    };
 
 
-        
 
 
-    const [passwword, setPassword] = useState("");
+
+    const saveUser = () => {
+        setUser({
+            ...user,
+            userGmail: userGmail,
+            userPassword: password,
+        });
+    }
+
+    //User bilgilerini kaydetme işlemi
+    //User bilgilerini database'e kaydet
+    // auth().createUserWithUID(user.userName, userPassword)
+
+    const register = () => {
+        auth().createUserWithEmailAndPassword(userGmail, password)
+            .then(() => {
+                database().ref('users/' + user.userName).set({
+                    userName: user.userName,
+                    birthday: user.birthday,
+                    imageUri: user.imageUri,
+                    userGmail: userGmail,
+                    userPassword: password,
+                    userId: auth().currentUser.uid,
+                    userStatus: "online",
+                    userStatusMessage: "",
+                    userStatusTimestamp: Date.now(),
+                    userLastActive: Date.now(),
+                    userLastActiveTimestamp: Date.now(),
+
+                });
+                goHome();
+            }
+            )
+            .catch(error => {
+                alert(error.message);
+                goBack();
+            }
+            );
+    }
+
+
+
+    /*   const register = () =>{
+           auth().createUserWithUID(user.userName, user.userPassword)
+           .then(() => {
+               database().ref('users/' + user.userName).set({
+                   userName: user.userName,
+                   birthday: user.birthday,
+                   imageUri: user.imageUri,
+                   userGmail: userGmail,
+                   userPassword: password,
+                   userId: auth().currentUser.uid,
+                   userStatus: "online",
+                   userStatusMessage: "",
+                   userStatusTimestamp: Date.now(),
+                   userLastActive: Date.now(),
+                   userLastActiveTimestamp: Date.now(),
+
+               });
+               goHome();
+           }
+           )
+           .catch(error => {
+               alert(error.message);
+               goBack();
+           }
+           );
+       }
+
+       */
+
+
+
+
+
+
+
+    /* const saveUserToDatabase = () => {
+ 
+             auth().signInWithEmailAndPassword(userGmail, password).then(() => {
+                 database().ref('users/' + user.userName).set({
+                     userName: user.userName,
+                     birthday: user.birthday,
+                     imageUri: user.imageUri,
+                     userGmail: userGmail,
+                     userPassword: password,
+                 });
+             }).catch(error => {
+                 console.log(error);
+             });
+             
+     }
+ 
+     */
+
+
+
+
+    async function SubmitButton() {
+        await register();
+        goHome();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    const [userGmail, setUserGmail] = useState('');
+    const [password, setPassword] = useState("");
 
     return (
         <SafeAreaView
             style={styles.primary.container}>
             <Text
                 style={styles.primary.Header}>
-                Hadi bir şifre belirleyelim
+                Son bir adım kaldı..
+                {user.userName}
+                {user.birthday}
+                {user.ImageUri}
+                {user.userPassword}
+                {user.userGmail}
             </Text>
             <View
                 style={styles.primary.Card}>
+
                 <View
                     style={styles.primary.InputBackground}>
                     <CustomInput
+                        placeholder="E posta adresinizi giriiz "
+                        value={userGmail}
+                        setValue={setUserGmail}
+                        theme="primary"
+                        autoComplete="email"
+                        keyboardType="email-address"
+                    />
+                    <CustomInput
                         theme="secondary"
                         placeholder="Şifrenizi Giriniz.."
-                        value={null}
-                        setValue={null}
+                        value={password}
+                        setValue={setPassword}
                     />
                 </View>
                 <View
@@ -88,14 +227,16 @@ const RegisterFinish = ({ navigation, route }) => {
                     />
                 </View>
             </View>
+            <Text>
+
+                {user.userPassword}
+                {user.userGmail}
+            </Text>
             <ContentInputModal
                 visible={inputModalVisible}
                 onClose={showInputModal}
-                Okey = {goBack}
-                
-
+                Okey={SubmitButton}
             />
-
         </SafeAreaView>
 
     )

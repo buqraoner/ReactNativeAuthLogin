@@ -84,16 +84,23 @@ const base_styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        
+
 
     },
 
-    PhotoHeaderView:{
+    PhotoHeaderView: {
         width: 340,
         height: 200,
-        marginTop: -40, 
+        marginTop: -40,
         marginBottom: 50,
-    }
+    },
+
+    Photo: {
+        width: 150,
+        height: 150,
+        borderRadius: 100,
+        borderColor: 'black',
+    },
 
 
 

@@ -1,5 +1,7 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Text } from "react-native";
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 
 //Components
@@ -10,23 +12,68 @@ import LoginInput from "../../components/CustomInput";
 
 
 
-const SignInScreen = () => {
+
+
+const GirisyapEkrani = ({ navigation }) => {
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+
+
+
+
+    const handleLogin = async () => {
+        setIsLoading(true);
+        await auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                setIsLoading(false);
+                navigation.navigate("Home");
+            })
+            .catch(error => {
+                setErrorMessage(error.message);
+                setIsLoading(false);
+                console.log(errorMessage);
+            });
+    };
+
+
+
+
+
+
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Bana Ne ?</Text>
             <LoginInput
-                placeholder="Kullanıcı Adı" />
-            <LoginInput
-                placeholder="Şifre" />
+                placeholder="Kullanıcı Adı"
+                value={email}
+                setValue={setEmail}
+                keyboardType="email-address"
+                autoComplete="email"
+
+
+            />
+            < LoginInput
+                placeholder="Şifre"
+                secureTextEntry
+                value={password}
+                setValue={setPassword}
+            />
             <Button
                 theme="loginScreenButton"
-                text="Giriş yap" />
+                text="Giriş yap"
+                onPress={handleLogin}
+
+            />
         </View>
     )
 }
 
 
-export default SignInScreen;
+export default GirisyapEkrani;
 
 
 const styles = StyleSheet.create({

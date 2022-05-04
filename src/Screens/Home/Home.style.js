@@ -9,3 +9,6 @@ const styles = StyleSheet.create({
         backgroundColor:"#C9F5DF",
     }
 });
+
+
+export default styles;
