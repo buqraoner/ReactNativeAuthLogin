@@ -1,15 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, SafeAreaView } from "react-native";
 
-
-
-
-const Liked = ({ navigation }) => {
+const Liked = ({navigation}) => {
     return (
-        <View>
-            <Text>Liked</Text>
-        </View>
-    )
-}
+        <SafeAreaView>
+        <Text>Liked</Text>
+        </SafeAreaView>
+    );
+    }
+
 
 export default Liked;

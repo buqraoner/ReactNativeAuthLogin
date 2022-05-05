@@ -188,11 +188,6 @@ const RegisterFinish = ({ navigation, route }) => {
             <Text
                 style={styles.primary.Header}>
                 Son bir adım kaldı..
-                {user.userName}
-                {user.birthday}
-                {user.ImageUri}
-                {user.userPassword}
-                {user.userGmail}
             </Text>
             <View
                 style={styles.primary.Card}>

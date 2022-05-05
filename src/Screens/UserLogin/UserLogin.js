@@ -35,6 +35,7 @@ const GirisyapEkrani = ({ navigation }) => {
                 setErrorMessage(error.message);
                 setIsLoading(false);
                 console.log(errorMessage);
+                alert(errorMessage);
             });
     };
 

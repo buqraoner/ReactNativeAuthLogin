@@ -85,7 +85,7 @@ const Birthday = ({ navigation, route }) => {
             <View style={styles.primary.HeaderView}>
                 <Text style={styles.primary.Header}>Kaç Yaşındasın ?</Text>
             </View>
-            <Text>{userName}</Text>
+            
             <View style={styles.primary.Card}>
                 <View style={styles.primary.InputBackground}>
                     <CustomInput

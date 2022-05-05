@@ -44,6 +44,7 @@ const PhotoSelect = ({ navigation, route }) => {
     const goRegisterFinishScreen = () => {
         navigation.navigate("RegisterFinish", user);
         
+        
     };
 
     const goBack = () => {
@@ -59,6 +60,7 @@ const PhotoSelect = ({ navigation, route }) => {
             storageOptions: {
                 path: 'images',
                 media: 'photo',
+                skipBackup: true,
             },
             selectionLimit: 1,
             maxHeight: 300,
@@ -89,6 +91,7 @@ const PhotoSelect = ({ navigation, route }) => {
             storageOptions: {
                 path: 'images',
                 media: 'photo',
+                skipBackup: true,
 
             },
             selectionLimit: 1,
@@ -113,6 +116,17 @@ const PhotoSelect = ({ navigation, route }) => {
             }
         });
     };
+
+
+    const uploadImage = async () => {
+        const storageRef = storage().ref();
+        const imageRef = storageRef.child(`images/${user.userName}`);
+        await imageRef.putFile(imageUri);
+        await imageRef.getDownloadURL().then(url => {
+            Setuser({ ...user, imageUri: url });
+        }
+        );
+    }
 
     
 
@@ -139,6 +153,7 @@ const PhotoSelect = ({ navigation, route }) => {
                     height: 100,
                 }}
                 source={imageUri}
+                
             />
             <View style={styles.primary.PhotoMainCard}>
                 <TouchableOpacity
