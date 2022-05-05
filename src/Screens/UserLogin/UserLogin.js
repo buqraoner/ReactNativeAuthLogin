@@ -49,7 +49,7 @@ const GirisyapEkrani = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.header}>Bana Ne ?</Text>
             <LoginInput
-                placeholder="Kullanıcı Adı"
+                placeholder="Kullanıcı E posta Adresi"
                 value={email}
                 setValue={setEmail}
                 keyboardType="email-address"
